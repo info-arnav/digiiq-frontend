@@ -1,0 +1,50 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 12px 40px; /* Reduced from 20px to make it thinner */
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .navbar .logo {
+    font-size: 20px; /* Slightly smaller logo */
+    font-weight: bold;
+    margin-right: 40px; /* Space between logo and nav items */
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 25px; /* Adjust gap between nav items */
+    margin-right: auto; /* Pushes everything else to the right */
+  }
+  
+  .nav-links li {
+    list-style: none;
+    font-size: 14px; /* Smaller font */
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  
+  .nav-links li:hover {
+    color: #000;
+  }
+  
+  .get-started {
+    background-color: #000;
+    color: #fff;
+    padding: 8px 16px; /* Smaller button */
+    border-radius: 4px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .get-started:hover {
+    background-color: #333;
+  }

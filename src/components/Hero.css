@@ -1,0 +1,130 @@
+/* Hero Section Container */
+.hero {
+    padding: 80px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  }
+  
+  /* Heading Styles */
+  .hero h5 {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0 auto 20px;
+    max-width: 800px;
+    line-height: 1.2;
+  }
+  
+  .hero p {
+    font-size: 18px;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto 30px;
+  }
+  
+  /* Get Started Button */
+  .hero .get-started {
+    background: #000;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 16px;
+  }
+  
+  .hero .get-started:hover {
+    background: #333;
+    transform: translateY(-2px);
+  }
+  
+  /* Brand Logos Container */
+  .brand-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+  }
+  
+  /* Individual Logo Styling */
+  .brand-logo {
+    height: 24px;
+    opacity: 0.8;
+    filter: 
+      brightness(0) 
+      saturate(100%) 
+      invert(0%) 
+      sepia(100%) 
+      saturate(0%) 
+      hue-rotate(0deg);
+    transition: all 0.3s ease;
+  }
+  
+  /* Special case for Notion PNG */
+  .brand-logo[alt="Notion"] {
+    filter: 
+      brightness(0) 
+      contrast(100%);
+    height: 22px; /* Slightly smaller to match others */
+  }
+  
+  .brand-logo:hover {
+    opacity: 1;
+    filter: 
+      brightness(0) 
+      saturate(100%) 
+      invert(0%) 
+      sepia(100%) 
+      saturate(1000%) 
+      hue-rotate(0deg);
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .hero {
+      padding: 60px 15px;
+    }
+    
+    .hero h1 {
+      font-size: 36px;
+    }
+    
+    .hero p {
+      font-size: 16px;
+    }
+    
+    .brand-logos {
+      gap: 25px;
+      margin-top: 30px;
+    }
+    
+    .brand-logo {
+      height: 20px;
+    }
+    
+    .brand-logo[alt="Notion"] {
+      height: 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .brand-logos {
+      gap: 15px;
+    }
+    
+    .brand-logo {
+      height: 16px;
+    }
+  }
