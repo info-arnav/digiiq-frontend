@@ -41,7 +41,7 @@ const Features = () => {
         <div className="feature-card">
           <div className="feature-icon">🎤</div>
           <h2>Lip Sync Technology</h2>
-          <p>Perfectly synchronize audio with video for realistic results</p>
+          <p>Perfectly synchronize audio with video/photo for realistic results</p>
           <div className="feature-highlight">
             <span></span>
           </div>
