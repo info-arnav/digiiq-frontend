@@ -10,6 +10,7 @@ export default function ImagePage() {
   const [colorPalette, setColorPalette] = useState('default');
   const [cameraAngle, setCameraAngle] = useState('default');
   const [contentType, setContentType] = useState('business');
+  const [generatedImages, setGeneratedImages] = useState(Array(4).fill(null));
 
   const handleGenerateImage = () => {
     if (!prompt.trim()) {
@@ -27,10 +28,14 @@ export default function ImagePage() {
       contentType
     });
     
-    // Simulate API call
+    // Simulate API call and image generation
     setTimeout(() => {
       setIsGenerating(false);
-      // In a real app, you would update state with the generated image here
+      // Update with placeholder images (in a real app, these would be actual image URLs)
+      setGeneratedImages(Array(4).fill({
+        url: `https://via.placeholder.com/512?text=Generated+${Date.now()}`,
+        prompt: prompt
+      }));
     }, 2000);
   };
 
@@ -69,7 +74,7 @@ export default function ImagePage() {
               onClick={handleGenerateImage}
               disabled={isGenerating || isEnhancing}
             >
-              {isGenerating ? '⏳ Generating Image...' : '🖼️ Generate Image'}
+              {isGenerating ? '⏳ Generating...' : '🖼️ Generate Image'}
             </button>
             <button 
               className={`btn secondary ${isEnhancing ? 'loading' : ''}`}
@@ -162,12 +167,27 @@ export default function ImagePage() {
           </div>
         </header>
 
-        <section className="generated-images">
-          {[...Array(4)].map((_, index) => (
-            <div className="image-placeholder" key={index}>
-              <div className="placeholder-text">
-                Image {index + 1}
-              </div>
+        <section className="image-grid">
+          {generatedImages.map((image, index) => (
+            <div className="image-card" key={index}>
+              {image ? (
+                <>
+                  <img 
+                    src={image.url} 
+                    alt={`Generated from: ${image.prompt}`}
+                    className="generated-image"
+                  />
+                  <div className="image-overlay">
+                    <span className="image-number">Image {index + 1}</span>
+                  </div>
+                </>
+              ) : (
+                <div className="image-placeholder">
+                  <div className="placeholder-text">
+                    Image {index + 1}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </section>

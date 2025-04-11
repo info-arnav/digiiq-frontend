@@ -1,130 +1,161 @@
-/* Hero Section Container */
+/* Hero.css */
 .hero {
-    padding: 80px 20px;
+    position: relative;
+    padding: 100px 0 150px;
     text-align: center;
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    overflow: hidden;
   }
   
-  /* Heading Styles */
+  .hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+  }
+  
   .hero h5 {
     font-size: 16px;
     color: #666;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    font-weight: 600;
   }
   
   .hero h1 {
-    font-size: 48px;
-    font-weight: 700;
-    margin: 0 auto 20px;
+    font-size: 56px;
+    font-weight: 800;
+    margin: 0 auto 24px;
     max-width: 800px;
     line-height: 1.2;
+    background: linear-gradient(90deg, #323030, #3e3f3f);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   
   .hero p {
-    font-size: 18px;
+    font-size: 20px;
     color: #666;
     max-width: 600px;
-    margin: 0 auto 30px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
   }
   
-  /* Get Started Button */
-  .hero .get-started {
-    background: #000;
+  .get-started {
+    background: linear-gradient(90deg, #6e8efb, #a777e3);
     color: white;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-weight: 500;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-weight: 600;
     border: none;
     cursor: pointer;
-    transition: all 0.2s;
-    font-size: 16px;
-  }
-  
-  .hero .get-started:hover {
-    background: #333;
-    transform: translateY(-2px);
-  }
-  
-  /* Brand Logos Container */
-  .brand-logos {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    margin-top: 50px;
-    flex-wrap: wrap;
-    padding: 20px 0;
-  }
-  
-  /* Individual Logo Styling */
-  .brand-logo {
-    height: 24px;
-    opacity: 0.8;
-    filter: 
-      brightness(0) 
-      saturate(100%) 
-      invert(0%) 
-      sepia(100%) 
-      saturate(0%) 
-      hue-rotate(0deg);
     transition: all 0.3s ease;
+    font-size: 18px;
+    box-shadow: 0 4px 15px rgba(110, 142, 251, 0.4);
   }
   
-  /* Special case for Notion PNG */
-  .brand-logo[alt="Notion"] {
-    filter: 
-      brightness(0) 
-      contrast(100%);
-    height: 22px; /* Slightly smaller to match others */
+  .get-started:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(110, 142, 251, 0.6);
+  }
+  
+  /* Brands Marquee */
+  .brands-marquee {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.03);
+    backdrop-filter: blur(2px);
+  }
+  
+  .brands-track {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: max-content;
+    animation: scroll 40s linear infinite;
+  }
+  
+  .brand-logo {
+    height: 40px;
+    margin: 0 40px;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+    filter: brightness(0) invert(0.2);
   }
   
   .brand-logo:hover {
-    opacity: 1;
-    filter: 
-      brightness(0) 
-      saturate(100%) 
-      invert(0%) 
-      sepia(100%) 
-      saturate(1000%) 
-      hue-rotate(0deg);
+    opacity: 0.9;
+    transform: scale(1.1);
   }
   
-  /* Responsive Adjustments */
+  .brand-logo img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+  
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .hero h1 {
+      font-size: 42px;
+    }
+    
+    .hero p {
+      font-size: 18px;
+    }
+    
+    .brand-logo {
+      height: 35px;
+      margin: 0 30px;
+    }
+  }
+  
   @media (max-width: 768px) {
     .hero {
-      padding: 60px 15px;
+      padding: 80px 0 120px;
     }
     
     .hero h1 {
       font-size: 36px;
     }
     
-    .hero p {
-      font-size: 16px;
-    }
-    
-    .brand-logos {
-      gap: 25px;
-      margin-top: 30px;
-    }
-    
     .brand-logo {
-      height: 20px;
+      height: 30px;
+      margin: 0 20px;
     }
     
-    .brand-logo[alt="Notion"] {
-      height: 18px;
+    .brands-marquee {
+      height: 80px;
     }
   }
   
   @media (max-width: 480px) {
-    .brand-logos {
-      gap: 15px;
+    .hero h1 {
+      font-size: 32px;
     }
     
     .brand-logo {
-      height: 16px;
+      height: 25px;
+      margin: 0 15px;
+    }
+    
+    .brands-marquee {
+      height: 60px;
     }
   }
