@@ -59,7 +59,9 @@ export default function Dashboard() {
           <Link to="/imagepage" className="card-link">
           <div className="menu-item">🖼️ Generate image</div>
           </Link>
+          <Link to="/videogeneration" className="card-link">
           <div className="menu-item">🎥 Generate video</div>
+          </Link>
           <Link to="/lipsync" className="card-link">
           <div className="menu-item">🎥 Generate LipSync</div>
           </Link>
@@ -90,7 +92,9 @@ export default function Dashboard() {
             <Link to="/imagepage" className="card-link">
               <div className="card">🖼️ Image</div>
             </Link>
+            <Link to="/videogeneration" className="card-link">
             <div className="card">🎥 Video</div>
+            </Link>
             <Link to="/lipsync" className="card-link">
             <div className="card">🎥 LipSync</div>
             </Link>
