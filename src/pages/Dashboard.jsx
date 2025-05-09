@@ -82,7 +82,9 @@ export default function Dashboard() {
             <span>🔔</span>
             <span>❓</span>
             <span>⚙️</span>
-            <button className="avatar" onClick={handleSignOut}>👤</button>
+            <Link to="/profile" className="avatar-link">
+  <button className="avatar">👤</button>
+</Link>
           </div>
         </header>
 

@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute'; // adjust path if need
 import ImagePage from './pages/ImagePage'; 
 import LipSync from './pages/LipSync';
 import Videogeneration from './pages/videogeneration'
+import UserProfile from './pages/UserProfile';
 
 
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/imagepage" element={<ImagePage />} />
         <Route path="/lipsync" element={<LipSync />} />
         <Route path="/videogeneration" element={<Videogeneration />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </Router>
   );
