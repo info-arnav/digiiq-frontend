@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { auth } from '../firebase';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -6,12 +6,25 @@ import './Dashboard.css';
 
 export default function Dashboard() {
   const [aiNews, setAiNews] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleSignOut = () => {
     auth.signOut().catch(error => {
       console.error("Error signing out:", error);
     });
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -57,13 +70,13 @@ export default function Dashboard() {
             <button className="new-btn">New +</button>
           </div>
           <Link to="/imagepage" className="card-link">
-          <div className="menu-item">🖼️ Generate image</div>
+            <div className="menu-item">🖼️ Generate image</div>
           </Link>
           <Link to="/videogeneration" className="card-link">
-          <div className="menu-item">🎥 Generate video</div>
+            <div className="menu-item">🎥 Generate video</div>
           </Link>
           <Link to="/lipsync" className="card-link">
-          <div className="menu-item">🎥 Generate LipSync</div>
+            <div className="menu-item">🎥 Generate LipSync</div>
           </Link>
         </div>
 
@@ -82,9 +95,49 @@ export default function Dashboard() {
             <span>🔔</span>
             <span>❓</span>
             <span>⚙️</span>
-            <Link to="/profile" className="avatar-link">
-  <button className="avatar">👤</button>
-</Link>
+            {/* Avatar Dropdown */}
+            <div className="avatar-dropdown" ref={dropdownRef}>
+              <button
+                className="avatar"
+                onClick={() => setDropdownOpen((open) => !open)}
+              >
+                👤
+              </button>
+              {dropdownOpen && (
+                <div className="dropdown-menu">
+                  <Link
+                    to="/profile"
+                    className="dropdown-item"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    My Account
+                  </Link>
+                  <Link
+                    to="/manage-plan"
+                    className="dropdown-item"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Manage your plan
+                  </Link>
+                  {/* <div
+                    className="dropdown-item"
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      handleSignOut();
+                    }}
+                  >
+                    Sign Out
+                  </div> */}
+                  <Link
+                    to="/login"
+                    className="dropdown-item"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Sign Out
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
@@ -95,10 +148,10 @@ export default function Dashboard() {
               <div className="card">🖼️ Image</div>
             </Link>
             <Link to="/videogeneration" className="card-link">
-            <div className="card">🎥 Video</div>
+              <div className="card">🎥 Video</div>
             </Link>
             <Link to="/lipsync" className="card-link">
-            <div className="card">🎥 LipSync</div>
+              <div className="card">🎥 LipSync</div>
             </Link>
           </div>
         </section>
@@ -120,7 +173,9 @@ export default function Dashboard() {
                   className="card-link"
                 >
                   <div className="card">
-                    <div className="card-title">{article.title.slice(0, 60)}...</div>
+                    <div className="card-title">
+                      {article.title.slice(0, 60)}...
+                    </div>
                     <div className="card-source">{article.source.name}</div>
                   </div>
                 </a>

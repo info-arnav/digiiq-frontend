@@ -1,11 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
-import { auth } from '../firebase';
+import React, { useState, useEffect, useRef } from "react";
+import { getAuth, updateProfile } from "firebase/auth";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db } from "../firebase";
+import { FaPencilAlt, FaUser, FaPhone, FaSave, FaTimes } from "react-icons/fa";
 import "./UserProfile.css";
 
-const DEFAULT_IMAGE = "https://via.placeholder.com/120x120.png?text=Profile";
-const LOCAL_STORAGE_KEY = "myapp_user_profile";
+const DEFAULT_IMAGE = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-export default function UserProfile() {
+const UserProfile = () => {
+  const auth = getAuth();
+  const storage = getStorage();
+  const fileInputRef = useRef(null);
+
   const [profile, setProfile] = useState({
     firstName: "",
     lastName: "",
@@ -14,200 +21,308 @@ export default function UserProfile() {
     phone: "",
     photoURL: DEFAULT_IMAGE,
   });
-  const [editMode, setEditMode] = useState(false);
-  const fileInputRef = useRef(null);
 
-  // Load profile from localStorage or Firebase Auth
+  const [editMode, setEditMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isImageUploading, setIsImageUploading] = useState(false);
+  const [tempPhoto, setTempPhoto] = useState(null);
+
   useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (saved) {
-      setProfile(JSON.parse(saved));
-    } else {
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        if (user) {
-          let firstName = "";
-          let lastName = "";
-          if (user.displayName) {
-            const parts = user.displayName.split(" ");
-            firstName = parts[0];
-            lastName = parts.slice(1).join(" ");
-          }
-          setProfile({
-            firstName,
-            lastName,
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setIsLoading(true);
+        const userRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(userRef);
+
+        if (docSnap.exists()) {
+          setProfile(docSnap.data());
+        } else {
+          const nameParts = user.displayName?.split(" ") || [];
+          const newProfile = {
+            firstName: nameParts[0] || "",
+            lastName: nameParts.slice(1).join(" ") || "",
             username: user.displayName || "",
             email: user.email || "",
             phone: user.phoneNumber || "",
             photoURL: user.photoURL || DEFAULT_IMAGE,
-          });
+          };
+          await setDoc(userRef, newProfile);
+          setProfile(newProfile);
         }
-      });
-      return unsubscribe;
-    }
-    // eslint-disable-next-line
+        setIsLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile((prev) => ({
-      ...prev,
+    setProfile((prevProfile) => ({
+      ...prevProfile,
       [name]: value,
     }));
   };
 
-  const handleEditClick = (e) => {
-    e.preventDefault();
-    fileInputRef.current.click();
-  };
+  const handleEdit = () => setEditMode(true);
 
-  // Store image as Base64 for persistence
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = function (evt) {
-        setProfile((prev) => ({
-          ...prev,
-          photoURL: evt.target.result,
-        }));
+  const handleSave = async () => {
+    if (isSaving) return;
+    setIsSaving(true);
+    
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("User not authenticated!");
+
+      const userRef = doc(db, "users", user.uid);
+      let updatedProfile = { ...profile };
+
+      // Upload new image if one was selected
+      if (tempPhoto && tempPhoto.file) {
+        try {
+          setIsImageUploading(true);
+          const storageRef = ref(storage, `profilePhotos/${user.uid}`);
+          await uploadBytes(storageRef, tempPhoto.file);
+          const downloadURL = await getDownloadURL(storageRef);
+          updatedProfile.photoURL = downloadURL;
+        } catch (uploadError) {
+          console.error("Error uploading image:", uploadError);
+          throw new Error("Failed to upload profile image");
+        } finally {
+          setIsImageUploading(false);
+        }
+      }
+
+      // Update profile data
+      const profileUpdates = {
+        firstName: updatedProfile.firstName,
+        lastName: updatedProfile.lastName,
+        username: updatedProfile.username,
+        phone: updatedProfile.phone,
+        photoURL: updatedProfile.photoURL,
+        displayName: `${updatedProfile.firstName} ${updatedProfile.lastName}`,
       };
-      reader.readAsDataURL(file);
-    }
-  };
 
-  const handleSave = () => {
-    setEditMode(false);
-    // Save to localStorage
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(profile));
-    // (Optional) Also update Firebase Auth profile here if you want
+      // Update Firestore
+      await updateDoc(userRef, profileUpdates);
+
+      // Update Firebase Auth profile
+      await updateProfile(user, {
+        displayName: profileUpdates.displayName,
+        photoURL: updatedProfile.photoURL,
+      });
+
+      // Update local state
+      setProfile(updatedProfile);
+      setTempPhoto(null);
+      setEditMode(false);
+      
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert(`Error: ${error.message}`);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCancel = () => {
+    setTempPhoto(null);
     setEditMode(false);
-    // Optionally reload from localStorage to revert unsaved changes
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (saved) {
-      setProfile(JSON.parse(saved));
-    }
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.match('image.*')) {
+      alert("Please select an image file (JPEG, PNG, etc.)");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    if (file.size > MAX_FILE_SIZE) {
+      alert("File is too large (max 5MB)");
+      return;
+    }
+
+    // Show preview immediately
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setTempPhoto({ url: ev.target.result, file });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const avatarSrc = tempPhoto?.url || profile.photoURL || DEFAULT_IMAGE;
+
+  if (isLoading) {
+    return (
+      <div className="profile-loading">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="profile-outer">
-      <div className="profile-card-modern">
-        <div className="avatar-section">
-          <div className="profile-avatar-modern">
-            <img src={profile.photoURL} alt="Profile" />
+    <div className="profile-container">
+      <div className="profile-card">
+        <div className="profile-header">
+          <div className="avatar-wrapper">
+            <img
+              src={avatarSrc}
+              alt="Profile"
+              className="profile-avatar"
+            />
             {editMode && (
               <>
                 <button
-                  className="edit-avatar-btn-modern"
-                  onClick={handleEditClick}
-                  title="Change profile picture"
+                  className="avatar-edit-button"
+                  onClick={() => fileInputRef.current.click()}
+                  title="Change photo"
+                  disabled={isImageUploading}
                 >
-                  <span role="img" aria-label="edit">🖊️</span>
+                  {isImageUploading ? (
+                    <div className="avatar-upload-spinner"></div>
+                  ) : (
+                    <FaPencilAlt size={12} />
+                  )}
                 </button>
                 <input
                   type="file"
-                  accept="image/*"
                   ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  accept="image/*"
                   style={{ display: "none" }}
-                  onChange={handleFileChange}
                 />
               </>
             )}
           </div>
-          <div className="avatar-username">
-            <h2>
-              {profile.firstName || profile.username
-                ? `${profile.firstName} ${profile.lastName}`.trim()
-                : "User"}
+          <div>
+            <h2 className="profile-name">
+              {profile.firstName || <span className="empty-field">First Name</span>}{" "}
+              {profile.lastName || <span className="empty-field">Last Name</span>}
             </h2>
-            <span className="profile-tag">
-              @{profile.username ? profile.username.replace(/\s/g, "") : "username"}
-            </span>
+            <p className="profile-email">{profile.email}</p>
           </div>
         </div>
-        <div className="profile-details-modern">
-          <div className="profile-detail-row">
-            <span className="detail-icon">📧</span>
-            {editMode ? (
-              <input
-                type="email"
-                className="edit-input-modern"
-                name="email"
-                value={profile.email}
-                disabled
-                placeholder="Email"
-              />
-            ) : (
-              <span className="detail-value">{profile.email}</span>
-            )}
-          </div>
-          <div className="profile-detail-row">
-            <span className="detail-icon">📱</span>
-            {editMode ? (
-              <input
-                type="tel"
-                className="edit-input-modern"
-                name="phone"
-                value={profile.phone}
-                onChange={handleChange}
-                placeholder="Phone Number"
-              />
-            ) : (
-              <span className="detail-value">{profile.phone || <span className="placeholder">No phone</span>}</span>
-            )}
-          </div>
-          <div className="profile-detail-row">
-            <span className="detail-icon">🧑</span>
-            {editMode ? (
-              <div className="edit-names-group">
+
+        <div className="profile-details">
+          <div className="detail-item">
+            <div className="detail-icon">
+              <FaUser />
+            </div>
+            <div className="detail-content">
+              <label>First Name</label>
+              {editMode ? (
                 <input
                   type="text"
-                  className="edit-input-modern"
                   name="firstName"
                   value={profile.firstName}
                   onChange={handleChange}
-                  placeholder="First Name"
+                  className="detail-input"
+                  placeholder="Enter first name"
                 />
+              ) : (
+                <p>{profile.firstName || <span className="empty-field">Not set</span>}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="detail-item">
+            <div className="detail-icon">
+              <FaUser />
+            </div>
+            <div className="detail-content">
+              <label>Last Name</label>
+              {editMode ? (
                 <input
                   type="text"
-                  className="edit-input-modern"
                   name="lastName"
                   value={profile.lastName}
                   onChange={handleChange}
-                  placeholder="Last Name"
+                  className="detail-input"
+                  placeholder="Enter last name"
                 />
-              </div>
-            ) : (
-              <span className="detail-value">
-                {profile.firstName || profile.lastName
-                  ? `${profile.firstName} ${profile.lastName}`.trim()
-                  : <span className="placeholder">No name</span>}
-              </span>
-            )}
+              ) : (
+                <p>{profile.lastName || <span className="empty-field">Not set</span>}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="detail-item">
+            <div className="detail-icon">
+              <FaUser />
+            </div>
+            <div className="detail-content">
+              <label>Username</label>
+              {editMode ? (
+                <input
+                  type="text"
+                  name="username"
+                  value={profile.username}
+                  onChange={handleChange}
+                  className="detail-input"
+                  placeholder="Enter username"
+                />
+              ) : (
+                <p>{profile.username || <span className="empty-field">Not set</span>}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="detail-item">
+            <div className="detail-icon">
+              <FaPhone />
+            </div>
+            <div className="detail-content">
+              <label>Phone</label>
+              {editMode ? (
+                <input
+                  type="text"
+                  name="phone"
+                  value={profile.phone}
+                  onChange={handleChange}
+                  className="detail-input"
+                  placeholder="Enter phone number"
+                />
+              ) : (
+                <p>{profile.phone || <span className="empty-field">Not provided</span>}</p>
+              )}
+            </div>
           </div>
         </div>
-        <div className="profile-actions-modern">
-          {editMode ? (
-            <>
-              <button className="profile-button-modern save-button" onClick={handleSave}>
-                Save
-              </button>
-              <button className="profile-button-modern cancel-button" onClick={handleCancel}>
-                Cancel
-              </button>
-            </>
-          ) : (
-            <button
-              className="profile-button-modern edit-button"
-              onClick={() => setEditMode(true)}
-            >
-              Edit Profile
+
+        <div className="profile-actions">
+          {!editMode ? (
+            <button className="edit-button" onClick={handleEdit}>
+              <FaPencilAlt /> Edit Profile
             </button>
+          ) : (
+            <div className="action-buttons">
+              <button 
+                className="save-button" 
+                onClick={handleSave} 
+                disabled={isSaving || isImageUploading}
+              >
+                <FaSave /> {isSaving ? "Saving..." : "Save Changes"}
+              </button>
+              <button 
+                className="cancel-button" 
+                onClick={handleCancel} 
+                disabled={isSaving || isImageUploading}
+              >
+                <FaTimes /> Cancel
+              </button>
+            </div>
           )}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default UserProfile;
