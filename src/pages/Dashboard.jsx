@@ -7,6 +7,7 @@ import './Dashboard.css';
 export default function Dashboard() {
   const [aiNews, setAiNews] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // <-- NEW
   const dropdownRef = useRef(null);
 
   const handleSignOut = () => {
@@ -41,29 +42,55 @@ export default function Dashboard() {
     fetchNews();
   }, []);
 
+  // Prevent body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [sidebarOpen]);
+
   return (
     <div className="dashboard-container">
-      <aside className="sidebar">
-        <div className="logo">LOGO</div>
+      {/* Hamburger menu for mobile */}
+      <button
+        className="sidebar-toggle"
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Open sidebar"
+      >
+        <span className="hamburger"></span>
+        <span className="hamburger"></span>
+        <span className="hamburger"></span>
+      </button>
 
+      {/* Sidebar */}
+      <aside className={`sidebar${sidebarOpen ? ' open' : ''}`}>
+        <button
+          className="sidebar-close"
+          onClick={() => setSidebarOpen(false)}
+          aria-label="Close sidebar"
+        >
+          ×
+        </button>
+        <div className="logo">LOGO</div>
+        {/* ...rest of your sidebar code... */}
         <nav className="menu-section">
           <div className="menu-item active">🏠 Home</div>
           <div className="menu-item">📁 Projects</div>
-          <div className="menu-item">📄 Templates</div>
+          <Link to="/templates" className="card-link">
+            <div className="menu-item">📄 Templates</div>
+          </Link>
           <div className="menu-item">🎨 Brand Kits</div>
         </nav>
-
         <hr />
-
         <nav className="menu-section">
           <div className="section-title">ASSETS</div>
           <div className="menu-item">✅ Saved</div>
           <div className="menu-item">⭐ Favourites</div>
           <div className="menu-item">📤 Shared</div>
         </nav>
-
         <hr />
-
         <div className="menu-section tools">
           <div className="tools-header">
             <span>TOOLS</span>
@@ -79,11 +106,15 @@ export default function Dashboard() {
             <div className="menu-item">🎥 Generate LipSync</div>
           </Link>
         </div>
-
         <div className="footer-text">Lorem Ipsum text</div>
       </aside>
 
+      {/* Overlay for mobile sidebar */}
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>}
+
       <main className="main-content">
+        {/* ...rest of your main content code... */}
+        {/* (No changes needed here) */}
         <header className="dashboard-header">
           <input
             type="text"
@@ -119,15 +150,6 @@ export default function Dashboard() {
                   >
                     Manage your plan
                   </Link>
-                  {/* <div
-                    className="dropdown-item"
-                    onClick={() => {
-                      setDropdownOpen(false);
-                      handleSignOut();
-                    }}
-                  >
-                    Sign Out
-                  </div> */}
                   <Link
                     to="/login"
                     className="dropdown-item"
@@ -140,7 +162,7 @@ export default function Dashboard() {
             </div>
           </div>
         </header>
-
+        {/* ...rest of your sections... */}
         <section className="content-section">
           <h3>Create</h3>
           <div className="card-row">
@@ -155,7 +177,6 @@ export default function Dashboard() {
             </Link>
           </div>
         </section>
-
         <section className="content-section">
           <h3>Trending / What's new</h3>
           <div className="card-grid">
@@ -183,7 +204,6 @@ export default function Dashboard() {
             )}
           </div>
         </section>
-
         <section className="content-section">
           <h3>Recents</h3>
           <div className="card-grid">

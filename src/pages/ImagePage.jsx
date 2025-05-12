@@ -1,197 +1,213 @@
-import React, { useState } from 'react';
-import './ImagePage.css';
+import React, { useState } from "react";
+import "./ImagePage.css";
 
 export default function ImagePage() {
-  const [prompt, setPrompt] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isEnhancing, setIsEnhancing] = useState(false);
+  const [prompt, setPrompt] = useState("");
   const [strength, setStrength] = useState(95);
-  const [aspectRatio, setAspectRatio] = useState('1:1');
-  const [colorPalette, setColorPalette] = useState('default');
-  const [cameraAngle, setCameraAngle] = useState('default');
-  const [contentType, setContentType] = useState('business');
-  const [generatedImages, setGeneratedImages] = useState(Array(4).fill(null));
+  const [assetType, setAssetType] = useState("image-to-image");
+  const [aspectRatio, setAspectRatio] = useState("1:1");
+  const [colorTone, setColorTone] = useState("none");
+  const [cameraAngle, setCameraAngle] = useState("none");
+  const [contentType, setContentType] = useState("business");
 
-  const handleGenerateImage = () => {
-    if (!prompt.trim()) {
-      alert('Please enter a prompt first');
-      return;
-    }
-    
-    setIsGenerating(true);
-    console.log('Generating image with settings:', {
-      prompt,
-      strength,
-      aspectRatio,
-      colorPalette,
-      cameraAngle,
-      contentType
-    });
-    
-    // Simulate API call and image generation
-    setTimeout(() => {
-      setIsGenerating(false);
-      // Update with placeholder images (in a real app, these would be actual image URLs)
-      setGeneratedImages(Array(4).fill({
-        url: `https://via.placeholder.com/512?text=Generated+${Date.now()}`,
-        prompt: prompt
-      }));
-    }, 2000);
+  // Button handlers
+  const handleDescribe = () => {
+    alert("Describe image clicked!\nPrompt: " + prompt);
+  };
+  const handleAIImprove = () => {
+    alert("AI Improve clicked!\nPrompt: " + prompt);
   };
 
-  const handleEnhancePrompt = () => {
-    if (!prompt.trim()) {
-      alert('Please enter a prompt first');
-      return;
-    }
-    
-    setIsEnhancing(true);
-    console.log('Enhancing prompt:', prompt);
-    
-    setTimeout(() => {
-      setIsEnhancing(false);
-      setPrompt(prev => `${prev} (enhanced with more details)`);
-    }, 1500);
-  };
+  // Dropdown options
+  const aspectRatios = [
+    { value: "1:1", label: "1:1 512px × 512px" },
+    { value: "16:9", label: "16:9 1024px × 576px" },
+    { value: "4:3", label: "4:3 800px × 600px" },
+  ];
+
+  const colorTones = [
+    { value: "none", label: "None" },
+    { value: "vibrant", label: "Vibrant" },
+    { value: "pastel", label: "Pastel" },
+    { value: "monochromatic", label: "Monochromatic" },
+  ];
+
+  const cameraAngles = [
+    { value: "none", label: "None" },
+    { value: "eye-level", label: "Eye Level" },
+    { value: "low-angle", label: "Low Angle" },
+    { value: "high-angle", label: "High Angle" },
+  ];
+
+  const contentTypes = [
+    { value: "business", label: "Business" },
+    { value: "social-media", label: "Social Media" },
+    { value: "ecommerce", label: "E-commerce" },
+    { value: "art", label: "Art" },
+  ];
 
   return (
-    <div className="image-page">
+    <div className="imagepage-root">
       {/* Sidebar */}
-      <aside className="image-sidebar">
-        <h2 className="logo">AI Image Generator</h2>
-
-        <div className="form-group">
-          <label>Prompt</label>
-          <textarea 
-            placeholder="Describe your image. Get creative..." 
+      <aside className="imagepage-sidebar">
+        <div className="sidebar-logo">LOGO</div>
+        <div className="sidebar-title">Image Generation</div>
+        
+        {/* Prompt Section */}
+        <div className="sidebar-section">
+          <label className="sidebar-label">Prompt</label>
+          <textarea
+            className="sidebar-input"
+            placeholder="Describe your image. Get creative..."
             rows={3}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
           />
-          <div className="button-group">
-            <button 
-              className={`btn primary ${isGenerating ? 'loading' : ''}`}
-              onClick={handleGenerateImage}
-              disabled={isGenerating || isEnhancing}
-            >
-              {isGenerating ? '⏳ Generating...' : '🖼️ Generate Image'}
+          <div className="sidebar-btn-row">
+            <button className="sidebar-btn" onClick={handleDescribe}>
+              Describe image
             </button>
-            <button 
-              className={`btn secondary ${isEnhancing ? 'loading' : ''}`}
-              onClick={handleEnhancePrompt}
-              disabled={isGenerating || isEnhancing}
-            >
-              {isEnhancing ? '✨ Enhancing...' : '✨ Enhance Prompt'}
+            <button className="sidebar-btn" onClick={handleAIImprove}>
+              AI Improve
             </button>
           </div>
         </div>
 
-        <div className="form-group">
-          <label>Strength <span className="value-label">{strength}%</span></label>
-          <div className="slider-container">
-            <input 
-              type="range" 
-              min="0" 
-              max="100" 
-              value={strength}
-              onChange={(e) => setStrength(e.target.value)}
-              className="slider" 
-            />
+        {/* Asset Type */}
+        <div className="sidebar-section">
+          <label className="sidebar-label">
+            Select Asset <span className="sidebar-help">ⓘ</span>
+          </label>
+          <div className="sidebar-asset-box">
+            <select 
+              className="sidebar-select"
+              value={assetType}
+              onChange={(e) => setAssetType(e.target.value)}
+            >
+              <option value="image-to-image">Image to Image</option>
+              <option value="text-to-image">Text to Image</option>
+              <option value="video-to-image">Video to Image</option>
+            </select>
+            <div className="sidebar-slider-row">
+              <button 
+                className="sidebar-slider-btn" 
+                onClick={() => setStrength(s => Math.max(0, s - 1))}
+              >
+                -
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={strength}
+                className="sidebar-slider"
+                onChange={(e) => setStrength(Number(e.target.value))}
+              />
+              <button 
+                className="sidebar-slider-btn" 
+                onClick={() => setStrength(s => Math.min(100, s + 1))}
+              >
+                +
+              </button>
+              <span className="sidebar-slider-value">{strength}</span>
+            </div>
           </div>
         </div>
 
-        <div className="form-group">
-          <label>Aspect Ratio</label>
-          <select 
-            className="select"
+        {/* Aspect Ratio */}
+        <div className="sidebar-section">
+          <label className="sidebar-label">Aspect ratio</label>
+          <select
+            className="sidebar-select"
             value={aspectRatio}
             onChange={(e) => setAspectRatio(e.target.value)}
           >
-            <option value="1:1">Square (1:1)</option>
-            <option value="16:9">Widescreen (16:9)</option>
-            <option value="4:3">Standard (4:3)</option>
+            {aspectRatios.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Color Palette</label>
-          <select 
-            className="select"
-            value={colorPalette}
-            onChange={(e) => setColorPalette(e.target.value)}
+        {/* Color and Tone */}
+        <div className="sidebar-section">
+          <label className="sidebar-label">Color and tone</label>
+          <select
+            className="sidebar-select"
+            value={colorTone}
+            onChange={(e) => setColorTone(e.target.value)}
           >
-            <option value="default">Default</option>
-            <option value="vibrant">Vibrant</option>
-            <option value="pastel">Pastel</option>
-            <option value="monochromatic">Monochromatic</option>
+            {colorTones.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Camera Angle</label>
-          <select 
-            className="select"
+        {/* Camera Angle */}
+        <div className="sidebar-section">
+          <label className="sidebar-label">Camera Angle</label>
+          <select
+            className="sidebar-select"
             value={cameraAngle}
             onChange={(e) => setCameraAngle(e.target.value)}
           >
-            <option value="default">Default</option>
-            <option value="top">Top View</option>
-            <option value="side">Side View</option>
-            <option value="low">Low Angle</option>
+            {cameraAngles.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Content Type</label>
-          <select 
-            className="select"
+        {/* Social Links */}
+        <div className="sidebar-section">
+          <label className="sidebar-label">Facebook / Instagram Links</label>
+          <input
+            className="sidebar-input"
+            placeholder="Insert link here...."
+            disabled
+          />
+        </div>
+
+        {/* Content Type */}
+        <div className="sidebar-section">
+          <label className="sidebar-label">Content type</label>
+          <select
+            className="sidebar-select"
             value={contentType}
             onChange={(e) => setContentType(e.target.value)}
           >
-            <option value="business">Business</option>
-            <option value="art">Art</option>
-            <option value="fashion">Fashion</option>
-            <option value="photography">Photography</option>
+            {contentTypes.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="image-main">
-        <header className="image-header">
-          <div className="spacer" />
-          <div className="header-actions">
-            <span className="upgrade-link">⚡ Upgrade Plan</span>
-            <button className="credit-btn">100 credits</button>
-            <div className="avatar-circle"></div>
-          </div>
-        </header>
-
-        <section className="image-grid">
-          {generatedImages.map((image, index) => (
-            <div className="image-card" key={index}>
-              {image ? (
-                <>
-                  <img 
-                    src={image.url} 
-                    alt={`Generated from: ${image.prompt}`}
-                    className="generated-image"
-                  />
-                  <div className="image-overlay">
-                    <span className="image-number">Image {index + 1}</span>
-                  </div>
-                </>
-              ) : (
-                <div className="image-placeholder">
-                  <div className="placeholder-text">
-                    Image {index + 1}
-                  </div>
-                </div>
-              )}
+      {/* Main area */}
+      <div className="imagepage-main">
+        {/* Header actions */}
+        <div className="imagepage-header">
+          <span className="header-upgrade">⚡ Upgrade</span>
+          <button className="header-credits">100 credits</button>
+        </div>
+        
+        {/* 2x2 image grid */}
+        <div className="imagepage-grid">
+          {[1, 2, 3, 4].map((n) => (
+            <div className="imagepage-gridcell" key={n}>
+              <div className="image-placeholder">
+                Image {n}
+              </div>
             </div>
           ))}
-        </section>
-      </main>
+        </div>
+      </div>
     </div>
   );
 }
