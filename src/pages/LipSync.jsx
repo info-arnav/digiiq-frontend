@@ -50,9 +50,7 @@ const LipSync = () => {
     try {
       const stream = videoRef.current.srcObject;
       videoChunks.current = [];
-      
       mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: 'video/webm' });
-      
       mediaRecorderRef.current.ondataavailable = (e) => {
         if (e.data.size > 0) {
           videoChunks.current.push(e.data);
@@ -85,7 +83,6 @@ const LipSync = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioRecorderRef.current = new MediaRecorder(stream);
       audioChunks.current = [];
-
       audioRecorderRef.current.ondataavailable = (e) => {
         if (e.data.size > 0) {
           audioChunks.current.push(e.data);
@@ -114,8 +111,9 @@ const LipSync = () => {
     }
   };
 
-  // Clean up on unmount
+  // Camera auto-start and cleanup on unmount
   useEffect(() => {
+    startCamera();
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
         videoRef.current.srcObject.getTracks().forEach(track => track.stop());
@@ -124,6 +122,7 @@ const LipSync = () => {
         audioRecorderRef.current.stream.getTracks().forEach(track => track.stop());
       }
     };
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -146,9 +145,7 @@ const LipSync = () => {
             <input type="file" accept="video/*,image/*" className="file-input" />
             <p className="format-info">Supported: .mp4, .mov, .jpg, .png</p>
             
-            {!cameraActive ? (
-              <button onClick={startCamera} className="camera-button">📷 Open Camera</button>
-            ) : (
+            {cameraActive ? (
               <>
                 <video ref={videoRef} autoPlay muted className="camera-preview" />
                 <div className="camera-controls">
@@ -161,8 +158,9 @@ const LipSync = () => {
                   <button onClick={stopCamera} className="close-button">Close Camera</button>
                 </div>
               </>
+            ) : (
+              <button onClick={startCamera} className="camera-button">📷 Open Camera</button>
             )}
-            
             <canvas ref={canvasRef} style={{ display: 'none' }} />
             {capturedImage && (
               <div className="media-preview">

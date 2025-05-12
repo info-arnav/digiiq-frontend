@@ -44,7 +44,7 @@ const UserProfile = () => {
             lastName: nameParts.slice(1).join(" ") || "",
             username: user.displayName || "",
             email: user.email || "",
-            phone: user.phoneNumber || "",
+            phone: user.phoneNumber ? user.phoneNumber.replace(/^\+91/, "") : "",
             photoURL: user.photoURL || DEFAULT_IMAGE,
           };
           await setDoc(userRef, newProfile);
@@ -59,18 +59,31 @@ const UserProfile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      [name]: value,
-    }));
+    // For phone, allow only digits and max 10 chars
+    if (name === "phone") {
+      const digits = value.replace(/\D/g, "").slice(0, 10);
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        phone: digits,
+      }));
+    } else {
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        [name]: value,
+      }));
+    }
   };
 
   const handleEdit = () => setEditMode(true);
 
   const handleSave = async () => {
     if (isSaving) return;
+    if (profile.phone.length !== 10) {
+      alert("Phone number must be exactly 10 digits.");
+      return;
+    }
     setIsSaving(true);
-    
+
     try {
       const user = auth.currentUser;
       if (!user) throw new Error("User not authenticated!");
@@ -113,11 +126,10 @@ const UserProfile = () => {
         photoURL: updatedProfile.photoURL,
       });
 
-      // Update local state
       setProfile(updatedProfile);
       setTempPhoto(null);
       setEditMode(false);
-      
+
       alert("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -136,20 +148,16 @@ const UserProfile = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.match('image.*')) {
       alert("Please select an image file (JPEG, PNG, etc.)");
       return;
     }
-
-    // Validate file size (max 5MB)
     const MAX_FILE_SIZE = 5 * 1024 * 1024;
     if (file.size > MAX_FILE_SIZE) {
       alert("File is too large (max 5MB)");
       return;
     }
 
-    // Show preview immediately
     const reader = new FileReader();
     reader.onload = (ev) => {
       setTempPhoto({ url: ev.target.result, file });
@@ -281,16 +289,28 @@ const UserProfile = () => {
             <div className="detail-content">
               <label>Phone</label>
               {editMode ? (
-                <input
-                  type="text"
-                  name="phone"
-                  value={profile.phone}
-                  onChange={handleChange}
-                  className="detail-input"
-                  placeholder="Enter phone number"
-                />
+                <div className="phone-input-wrapper">
+                  <span className="country-code">+91</span>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={profile.phone}
+                    onChange={handleChange}
+                    className="detail-input"
+                    placeholder="10 digit phone number"
+                    maxLength={10}
+                    inputMode="numeric"
+                  />
+                </div>
               ) : (
-                <p>{profile.phone || <span className="empty-field">Not provided</span>}</p>
+                <p>
+                  {profile.phone && profile.phone.length === 10
+                    ? `+91 ${profile.phone}`
+                    : <span className="empty-field">Not provided</span>}
+                </p>
+              )}
+              {editMode && profile.phone && profile.phone.length > 0 && profile.phone.length < 10 && (
+                <div className="phone-error">Enter exactly 10 digits</div>
               )}
             </div>
           </div>
@@ -303,16 +323,16 @@ const UserProfile = () => {
             </button>
           ) : (
             <div className="action-buttons">
-              <button 
-                className="save-button" 
-                onClick={handleSave} 
+              <button
+                className="save-button"
+                onClick={handleSave}
                 disabled={isSaving || isImageUploading}
               >
                 <FaSave /> {isSaving ? "Saving..." : "Save Changes"}
               </button>
-              <button 
-                className="cancel-button" 
-                onClick={handleCancel} 
+              <button
+                className="cancel-button"
+                onClick={handleCancel}
                 disabled={isSaving || isImageUploading}
               >
                 <FaTimes /> Cancel
