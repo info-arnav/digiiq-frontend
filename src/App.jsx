@@ -9,6 +9,7 @@ import LipSync from "./pages/LipSync";
 import Videogeneration from "./pages/videogeneration";
 import UserProfile from "./pages/UserProfile";
 import ManagePlan from "./pages/ManagePlan";
+import ManagePlanPage from "./pages/ManagePlanPage";
 import { UserProvider } from "./contexts/UserContext";
 import Templates from './pages/Templates';
 
@@ -32,7 +33,8 @@ function App() {
             <Route path="/lipsync" element={<LipSync />} />
             <Route path="/videogeneration" element={<Videogeneration />} />
             <Route path="/profile" element={<UserProfile />} />
-            <Route path="/manage-plan" element={<ManagePlan />} />
+            {/* <Route path="/manage-plan" element={<ManagePlan />} /> */}
+            <Route path="/manage-plan" element={<ManagePlanPage />} />
             <Route path="/templates" element={<Templates />} />
           </Routes>
         </div>

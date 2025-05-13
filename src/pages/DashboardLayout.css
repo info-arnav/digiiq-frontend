@@ -1,0 +1,96 @@
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background: #fff;
+    position: relative;
+  }
+  
+  /* Sidebar styles */
+  .sidebar {
+    width: 250px;
+    min-width: 200px;
+    background: #fff;
+    border-right: 1px solid #ececec;
+    position: relative;
+    z-index: 2;
+    transition: left 0.3s;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .main-content {
+    flex: 1;
+    background: #fff;
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: auto;
+  }
+  
+  /* Hamburger menu for mobile */
+  .sidebar-toggle {
+    display: none;
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    z-index: 1001;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+  }
+  
+  .hamburger {
+    width: 28px;
+    height: 3px;
+    background: #888;
+    margin: 5px 0;
+    border-radius: 2px;
+    display: block;
+  }
+  
+  /* Sidebar overlay for mobile */
+  .sidebar-overlay {
+    display: none;
+  }
+  
+  @media (max-width: 900px) {
+    .sidebar {
+      position: fixed;
+      left: -260px;
+      top: 0;
+      height: 100vh;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.07);
+      transition: left 0.3s;
+      z-index: 1000;
+    }
+    .sidebar.open {
+      left: 0;
+    }
+    .main-content {
+      margin-left: 0;
+    }
+    .sidebar-toggle {
+      display: block;
+    }
+    .sidebar-overlay {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.15);
+      z-index: 999;
+    }
+  }
+  
+  /* Optional: Hide scrollbar for sidebar on desktop */
+  .sidebar::-webkit-scrollbar {
+    width: 6px;
+    background: transparent;
+  }
+  .sidebar::-webkit-scrollbar-thumb {
+    background: #ececec;
+    border-radius: 4px;
+  }
+  

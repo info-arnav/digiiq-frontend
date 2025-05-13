@@ -1,16 +1,19 @@
+// ManagePlan.js
 import React from "react";
 import "./ManagePlan.css";
 
-export default function ManagePlan() {
+export default function ManagePlan({ profile }) {
   return (
     <div className="manage-container">
       <header className="manage-header">
         <img
           className="manage-avatar"
-          src="https://randomuser.me/api/portraits/women/44.jpg"
+          src={profile.photoURL}
           alt="User avatar"
         />
-        <span className="manage-username">Anusha</span>
+        <span className="manage-username">
+          {profile.firstName} {profile.lastName}
+        </span>
       </header>
       <nav className="manage-tabs" aria-label="Profile navigation">
         <div className="manage-tab">Settings</div>

@@ -1,8 +1,10 @@
+// UserProfile.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { getAuth, updateProfile } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db } from "../firebase";
+import DashboardLayout from "./DashboardLayout";
 import { FaPencilAlt, FaUser, FaPhone, FaSave, FaTimes } from "react-icons/fa";
 import "./UserProfile.css";
 
@@ -59,7 +61,6 @@ const UserProfile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // For phone, allow only digits and max 10 chars
     if (name === "phone") {
       const digits = value.replace(/\D/g, "").slice(0, 10);
       setProfile((prevProfile) => ({
@@ -169,14 +170,16 @@ const UserProfile = () => {
 
   if (isLoading) {
     return (
-      <div className="profile-loading">
-        <div className="loading-spinner"></div>
-      </div>
+      <DashboardLayout>
+        <div className="profile-loading">
+          <div className="loading-spinner"></div>
+        </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="profile-container">
+    <DashboardLayout>
       <div className="profile-card">
         <div className="profile-header">
           <div className="avatar-wrapper">
@@ -341,7 +344,7 @@ const UserProfile = () => {
           )}
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
