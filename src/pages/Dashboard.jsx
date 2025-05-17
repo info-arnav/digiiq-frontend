@@ -7,7 +7,7 @@ import './Dashboard.css';
 export default function Dashboard() {
   const [aiNews, setAiNews] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false); // <-- NEW
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const handleSignOut = () => {
@@ -16,7 +16,6 @@ export default function Dashboard() {
     });
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -31,57 +30,61 @@ export default function Dashboard() {
     const fetchNews = async () => {
       try {
         const response = await axios.get(
-          'https://newsapi.org/v2/everything?q=artificial%20intelligence&sortBy=publishedAt&pageSize=4&apiKey=4ec99912abdf4d0383eacfba6a2aa76b'
+          `https://newsdata.io/api/1/news?apikey=pub_87577345c08a7a7e6c7e9e5b3f643d539bfbf&q=artificial intelligence&language=en`
         );
-        setAiNews(response.data.articles);
+
+        // Filter articles to include only AI, ML, DL related content
+        const filtered = (response.data.results || []).filter(article => {
+          const title = article.title?.toLowerCase() || "";
+          const description = article.description?.toLowerCase() || "";
+          return (
+            title.includes("artificial intelligence") ||
+            title.includes("machine learning") ||
+            title.includes("deep learning") ||
+            title.includes("ai") ||
+            title.includes("ml") ||
+            title.includes("dl") ||
+            description.includes("artificial intelligence") ||
+            description.includes("machine learning") ||
+            description.includes("deep learning") ||
+            description.includes("ai") ||
+            description.includes("ml") ||
+            description.includes("dl")
+          );
+        });
+
+        setAiNews(filtered);
       } catch (error) {
         console.error("Error fetching AI news:", error);
       }
     };
-
     fetchNews();
   }, []);
 
-  // Prevent body scroll when sidebar is open on mobile
   useEffect(() => {
-    if (sidebarOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = sidebarOpen ? "hidden" : "";
   }, [sidebarOpen]);
 
   return (
     <div className="dashboard-container">
-      {/* Hamburger menu for mobile */}
-      <button
-        className="sidebar-toggle"
-        onClick={() => setSidebarOpen(true)}
-        aria-label="Open sidebar"
-      >
+      <button className="sidebar-toggle" onClick={() => setSidebarOpen(true)}>
         <span className="hamburger"></span>
         <span className="hamburger"></span>
         <span className="hamburger"></span>
       </button>
 
-      {/* Sidebar */}
       <aside className={`sidebar${sidebarOpen ? ' open' : ''}`}>
-        <button
-          className="sidebar-close"
-          onClick={() => setSidebarOpen(false)}
-          aria-label="Close sidebar"
-        >
-          ×
-        </button>
+        <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>×</button>
         <div className="logo">LOGO</div>
-        {/* ...rest of your sidebar code... */}
         <nav className="menu-section">
           <div className="menu-item active">🏠 Home</div>
           <div className="menu-item">📁 Projects</div>
           <Link to="/templates" className="card-link">
             <div className="menu-item">📄 Templates</div>
           </Link>
-          <div className="menu-item">🎨 Brand Kits</div>
+          <Link to="/brandkits" className="card-link">
+            <div className="menu-item">🎨 Brand Kits</div>
+          </Link>
         </nav>
         <hr />
         <nav className="menu-section">
@@ -109,74 +112,38 @@ export default function Dashboard() {
         <div className="footer-text">Lorem Ipsum text</div>
       </aside>
 
-      {/* Overlay for mobile sidebar */}
       {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>}
 
       <main className="main-content">
-        {/* ...rest of your main content code... */}
-        {/* (No changes needed here) */}
         <header className="dashboard-header">
-          <input
-            type="text"
-            placeholder="🔍 Search for content"
-            className="search-bar"
-          />
+          <input type="text" placeholder="🔍 Search for content" className="search-bar" />
           <div className="header-actions">
             <span>⚡ Upgrade</span>
             <span>🔔</span>
             <span>❓</span>
             <span>⚙️</span>
-            {/* Avatar Dropdown */}
             <div className="avatar-dropdown" ref={dropdownRef}>
-              <button
-                className="avatar"
-                onClick={() => setDropdownOpen((open) => !open)}
-              >
-                👤
-              </button>
+              <button className="avatar" onClick={() => setDropdownOpen(!dropdownOpen)}>👤</button>
               {dropdownOpen && (
                 <div className="dropdown-menu">
-                  <Link
-                    to="/profile"
-                    className="dropdown-item"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    My Account
-                  </Link>
-                  <Link
-                    to="/manage-plan"
-                    className="dropdown-item"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    Manage your plan
-                  </Link>
-                  <Link
-                    to="/login"
-                    className="dropdown-item"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    Sign Out
-                  </Link>
+                  <Link to="/profile" className="dropdown-item" onClick={() => setDropdownOpen(false)}>My Account</Link>
+                  <Link to="/manage-plan" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Manage your plan</Link>
+                  <Link to="/login" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Sign Out</Link>
                 </div>
               )}
             </div>
           </div>
         </header>
-        {/* ...rest of your sections... */}
+
         <section className="content-section">
           <h3>Create</h3>
           <div className="card-row">
-            <Link to="/imagepage" className="card-link">
-              <div className="card">🖼️ Image</div>
-            </Link>
-            <Link to="/videogeneration" className="card-link">
-              <div className="card">🎥 Video</div>
-            </Link>
-            <Link to="/lipsync" className="card-link">
-              <div className="card">🎥 LipSync</div>
-            </Link>
+            <Link to="/imagepage" className="card-link"><div className="card">🖼️ Image</div></Link>
+            <Link to="/videogeneration" className="card-link"><div className="card">🎥 Video</div></Link>
+            <Link to="/lipsync" className="card-link"><div className="card">🎥 LipSync</div></Link>
           </div>
         </section>
+
         <section className="content-section">
           <h3>Trending / What's new</h3>
           <div className="card-grid">
@@ -188,22 +155,26 @@ export default function Dashboard() {
               aiNews.map((article, idx) => (
                 <a
                   key={idx}
-                  href={article.url}
+                  href={article.link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="card-link"
                 >
-                  <div className="card">
-                    <div className="card-title">
-                      {article.title.slice(0, 60)}...
-                    </div>
-                    <div className="card-source">{article.source.name}</div>
+                  <div className="card with-image">
+                    <img
+                      src={article.image_url || 'https://via.placeholder.com/150'}
+                      alt="news"
+                      className="card-thumbnail"
+                    />
+                    <div className="card-title">{article.title?.slice(0, 60)}...</div>
+                    <div className="card-source">{article.source_id}</div>
                   </div>
                 </a>
               ))
             )}
           </div>
         </section>
+
         <section className="content-section">
           <h3>Recents</h3>
           <div className="card-grid">

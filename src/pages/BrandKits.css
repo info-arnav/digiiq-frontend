@@ -1,0 +1,55 @@
+.brandkits-container {
+  padding: 2rem;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.brandkits-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.create-btn {
+  padding: 0.5rem 1rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.kits-title {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+}
+
+.kits-grid {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.kit-card {
+  width: 220px;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.75rem;
+}
+
+.kit-thumbnail {
+  background-color: #ddd;
+  height: 120px;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.kit-info {
+  font-size: 0.9rem;
+}

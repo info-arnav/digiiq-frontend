@@ -498,3 +498,11 @@ body, html {
   height: 100%;
   background-color: #f8f9fa;
 }
+
+.card.with-image img.card-thumbnail {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}

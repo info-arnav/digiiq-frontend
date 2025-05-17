@@ -12,6 +12,7 @@ import ManagePlan from "./pages/ManagePlan";
 import ManagePlanPage from "./pages/ManagePlanPage";
 import { UserProvider } from "./contexts/UserContext";
 import Templates from './pages/Templates';
+import BrandKits from './pages/BrandKits';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             {/* <Route path="/manage-plan" element={<ManagePlan />} /> */}
             <Route path="/manage-plan" element={<ManagePlanPage />} />
             <Route path="/templates" element={<Templates />} />
+            <Route path="/brandkits" element={<BrandKits />} />
           </Routes>
         </div>
       </Router>
