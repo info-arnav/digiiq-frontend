@@ -92,9 +92,11 @@ export default function Dashboard() {
         <hr />
         <nav className="menu-section">
           <div className="section-title">ASSETS</div>
-          <div className="menu-item">✅ Saved</div>
+          <Link to="/saved" className="card-link">
+          <div className="menu-item">✅ Saved</div></Link>
           <div className="menu-item">⭐ Favourites</div>
-          <div className="menu-item">📤 Shared</div>
+          <Link to="/shared" className="card-link">
+          <div className="menu-item">📤 Shared</div></Link>
         </nav>
         <hr />
         <div className="menu-section tools">

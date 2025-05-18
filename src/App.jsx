@@ -13,6 +13,9 @@ import ManagePlanPage from "./pages/ManagePlanPage";
 import { UserProvider } from "./contexts/UserContext";
 import Templates from './pages/Templates';
 import BrandKits from './pages/BrandKits';
+import Shared from './pages/Shared';
+import Saved from './pages/Saved';
+
 
 function App() {
   return (
@@ -38,6 +41,8 @@ function App() {
             <Route path="/manage-plan" element={<ManagePlanPage />} />
             <Route path="/templates" element={<Templates />} />
             <Route path="/brandkits" element={<BrandKits />} />
+            <Route path="/shared" element={<Shared />} />
+            <Route path="/saved" element={<Saved />} />
           </Routes>
         </div>
       </Router>
