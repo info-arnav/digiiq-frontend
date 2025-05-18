@@ -24,14 +24,12 @@ export default function Login() {
     
     try {
       if (isLogin) {
-        // Login logic
         await signInWithEmailAndPassword(auth, email, password);
       } else {
-        // Signup logic
         await createUserWithEmailAndPassword(auth, email, password);
         alert('Account created successfully! You can now login.');
-        setIsLogin(true); // Switch back to login
-        return; // Don't navigate since we're switching views
+        setIsLogin(true);
+        return;
       }
       navigate('/dashboard');
     } catch (error) {
@@ -70,14 +68,38 @@ export default function Login() {
 
   return (
     <div className="login-wrapper">
-      <div className="login-left"></div>
+      <div className="login-left">
+        <div className="hero-content">
+          <h1>Create Without Limits</h1>
+          <p className="tagline">
+            Where imagination meets AI-powered creation.<br />
+            Make anything you envision in minutes.
+          </p>
+          
+          <div className="stats">
+            <div className="stat-item">
+              <div className="stat-number">5+</div>
+              <div className="stat-label">Years of innovation</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">∞</div>
+              <div className="stat-label">Creative possibilities</div>
+            </div>
+          </div>
+          
+          <div className="quote">
+            "The only limit is your creativity"
+            <div className="quote-author">— Our Community</div>
+          </div>
+        </div>
+      </div>
 
       <div className="login-container">
         <div className="login-card">
           <div className="logo">LOGO</div>
           <h2>{isLogin ? 'Welcome back' : 'Create account'}</h2>
           <p className="subtext">
-            {isLogin ? 'Please login to continue' : 'Get started with your account'}
+            {isLogin ? 'Login to continue to your dashboard' : 'Get started with 250 free credits'}
           </p>
 
           {error && <div className="error-message">{error}</div>}
@@ -90,6 +112,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                placeholder="Enter your email"
               />
             </div>
             
@@ -101,6 +124,7 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength="6"
+                placeholder="Enter your password"
               />
             </div>
             
@@ -126,14 +150,25 @@ export default function Login() {
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
             Sign in with Google
           </button>
+
+          {/* <button className="apple-button" disabled={loading}>
+            <img src="/apple-icon.svg" alt="Apple" />
+            Sign in with Apple
+          </button>
+          
+          {isLogin && (
+            <p className="forgot-password">
+              <a href="/forgot-password">Forgot password?</a>
+            </p>
+          )} */}
           
           <p className="auth-toggle">
-            {isLogin ? 'Need an account?' : 'Already have an account?'}{' '}
+            {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
             <span onClick={() => {
               setIsLogin(!isLogin);
               setError('');
             }}>
-              {isLogin ? 'Create one' : 'Log in'}
+              {isLogin ? 'Sign up for free' : 'Log in'}
             </span>
           </p>
         </div>

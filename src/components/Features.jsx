@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // ✅ Add this line
 import './Features.css';
 
 const Features = () => {
@@ -13,7 +14,8 @@ const Features = () => {
       <div className="features-grid">
         <div className="feature-card">
           <div className="feature-icon">🖼️</div>
-          <h2>AI Image Generation</h2>
+          <Link to="/login">
+          <h2>AI Image Generation</h2></Link>
           <p>Create stunning images from text prompts with our advanced AI models</p>
           <div className="feature-highlight">
             <span></span>
@@ -31,8 +33,10 @@ const Features = () => {
 
         <div className="feature-card">
           <div className="feature-icon">🎥</div>
-          <h2>Video Generation</h2>
-          <p>Transform scripts into professional videos automatically</p>
+          <Link to="/login">
+            <h2>Video Generation</h2></Link>
+            <p>Transform scripts into professional videos automatically</p>
+          
           <div className="feature-highlight">
             <span></span>
           </div>
@@ -40,7 +44,8 @@ const Features = () => {
 
         <div className="feature-card">
           <div className="feature-icon">🎤</div>
-          <h2>Lip Sync Technology</h2>
+          <Link to="/login">
+          <h2>Lip Sync Technology</h2></Link>
           <p>Perfectly synchronize audio with video/photo for realistic results</p>
           <div className="feature-highlight">
             <span></span>

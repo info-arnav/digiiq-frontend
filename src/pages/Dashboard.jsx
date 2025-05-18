@@ -49,7 +49,10 @@ export default function Dashboard() {
             description.includes("deep learning") ||
             description.includes("ai") ||
             description.includes("ml") ||
-            description.includes("dl")
+            description.includes("dl") ||
+            description.includes("image generation using AI") ||
+            description.includes("video generation using AI") ||
+            description.includes("lip sync") 
           );
         });
 
