@@ -5,8 +5,8 @@ import ManagePlan from "./ManagePlan";
 
 // Simulate fetching user profile (replace with your actual logic)
 const profile = {
-  firstName: "Anusha",
-  lastName: "",
+  firstName: "AB",
+  lastName: "CD",
   photoURL: "https://randomuser.me/api/portraits/women/44.jpg",
 };
 
