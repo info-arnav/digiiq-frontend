@@ -14,16 +14,22 @@ const LipSync = () => {
   const audioChunks = useRef([]);
   const videoChunks = useRef([]);
   const [cameraActive, setCameraActive] = useState(false);
+  const [cameraError, setCameraError] = useState(null);
 
   // Camera capture
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      setCameraError(null);
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: true, 
+        audio: true 
+      });
       videoRef.current.srcObject = stream;
       setCameraActive(true);
     } catch (err) {
       console.error("Error accessing camera:", err);
-      alert("Could not access camera. Please check permissions.");
+      setCameraError("Could not access camera. Please check permissions.");
+      setCameraActive(false);
     }
   };
 
@@ -32,10 +38,13 @@ const LipSync = () => {
       videoRef.current.srcObject.getTracks().forEach(track => track.stop());
       setCameraActive(false);
       setIsVideoRecording(false);
+      setCameraError(null);
     }
   };
 
   const capturePhoto = () => {
+    if (!cameraActive) return;
+    
     const video = videoRef.current;
     const canvas = canvasRef.current;
     canvas.width = video.videoWidth;
@@ -47,10 +56,16 @@ const LipSync = () => {
 
   // Video recording
   const startVideoRecording = async () => {
+    if (!cameraActive) {
+      alert("Please enable camera first");
+      return;
+    }
+
     try {
       const stream = videoRef.current.srcObject;
       videoChunks.current = [];
       mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      
       mediaRecorderRef.current.ondataavailable = (e) => {
         if (e.data.size > 0) {
           videoChunks.current.push(e.data);
@@ -63,10 +78,11 @@ const LipSync = () => {
         setRecordedVideoURL(url);
       };
 
-      mediaRecorderRef.current.start(100); // Collect data every 100ms
+      mediaRecorderRef.current.start(100);
       setIsVideoRecording(true);
     } catch (err) {
       console.error("Error starting video recording:", err);
+      setCameraError("Failed to start video recording");
     }
   };
 
@@ -83,6 +99,7 @@ const LipSync = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioRecorderRef.current = new MediaRecorder(stream);
       audioChunks.current = [];
+      
       audioRecorderRef.current.ondataavailable = (e) => {
         if (e.data.size > 0) {
           audioChunks.current.push(e.data);
@@ -99,7 +116,7 @@ const LipSync = () => {
       setIsRecording(true);
     } catch (err) {
       console.error("Error accessing microphone:", err);
-      alert("Could not access microphone. Please check permissions.");
+      setCameraError("Could not access microphone. Please check permissions.");
     }
   };
 
@@ -111,9 +128,8 @@ const LipSync = () => {
     }
   };
 
-  // Camera auto-start and cleanup on unmount
+  // Cleanup on unmount
   useEffect(() => {
-    startCamera();
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
         videoRef.current.srcObject.getTracks().forEach(track => track.stop());
@@ -122,7 +138,6 @@ const LipSync = () => {
         audioRecorderRef.current.stream.getTracks().forEach(track => track.stop());
       }
     };
-    // eslint-disable-next-line
   }, []);
 
   return (
@@ -145,6 +160,15 @@ const LipSync = () => {
             <input type="file" accept="video/*,image/*" className="file-input" />
             <p className="format-info">Supported: .mp4, .mov, .jpg, .png</p>
             
+            {cameraError && (
+              <div className="error-message">
+                {cameraError}
+                <button className="permission-button" onClick={startCamera}>
+                  Try Again
+                </button>
+              </div>
+            )}
+
             {cameraActive ? (
               <>
                 <video ref={videoRef} autoPlay muted className="camera-preview" />
@@ -161,13 +185,16 @@ const LipSync = () => {
             ) : (
               <button onClick={startCamera} className="camera-button">📷 Open Camera</button>
             )}
+            
             <canvas ref={canvasRef} style={{ display: 'none' }} />
+            
             {capturedImage && (
               <div className="media-preview">
                 <h4>Captured Photo</h4>
                 <img src={capturedImage} alt="Captured" className="captured-image" />
               </div>
             )}
+            
             {recordedVideoURL && (
               <div className="media-preview">
                 <h4>Recorded Video</h4>
