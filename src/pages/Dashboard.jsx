@@ -94,7 +94,8 @@ export default function Dashboard() {
           <div className="section-title">ASSETS</div>
           <Link to="/saved" className="card-link">
           <div className="menu-item">✅ Saved</div></Link>
-          <div className="menu-item">⭐ Favourites</div>
+          <Link to="/favourites" className="card-link">
+          <div className="menu-item">⭐ Favourites</div></Link>
           <Link to="/shared" className="card-link">
           <div className="menu-item">📤 Shared</div></Link>
         </nav>
@@ -142,10 +143,28 @@ export default function Dashboard() {
 
         <section className="content-section">
           <h3>Create</h3>
-          <div className="card-row">
-            <Link to="/imagepage" className="card-link"><div className="card">🖼️ Image</div></Link>
-            <Link to="/videogeneration" className="card-link"><div className="card">🎥 Video</div></Link>
-            <Link to="/lipsync" className="card-link"><div className="card">🎥 LipSync</div></Link>
+          <div className="create-cards">
+            <Link to="/imagepage" className="create-card">
+              <div className="create-card-icon">🖼️</div>
+              <div className="create-card-content">
+                <h4>Generate Image</h4>
+                <p>Create stunning AI-generated images</p>
+              </div>
+            </Link>
+            <Link to="/videogeneration" className="create-card">
+              <div className="create-card-icon">🎥</div>
+              <div className="create-card-content">
+                <h4>Generate Video</h4>
+                <p>Transform your ideas into videos</p>
+              </div>
+            </Link>
+            <Link to="/lipsync" className="create-card">
+              <div className="create-card-icon">🎤</div>
+              <div className="create-card-content">
+                <h4>Lip Sync</h4>
+                <p>Sync audio with video perfectly</p>
+              </div>
+            </Link>
           </div>
         </section>
 

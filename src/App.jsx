@@ -15,7 +15,7 @@ import Templates from './pages/Templates';
 import BrandKits from './pages/BrandKits';
 import Shared from './pages/Shared';
 import Saved from './pages/Saved';
-
+import Favourites from './pages/Favorites';
 
 function App() {
   return (
@@ -43,6 +43,7 @@ function App() {
             <Route path="/brandkits" element={<BrandKits />} />
             <Route path="/shared" element={<Shared />} />
             <Route path="/saved" element={<Saved />} />
+            <Route path="/favourites" element={<Favourites />} />
           </Routes>
         </div>
       </Router>
