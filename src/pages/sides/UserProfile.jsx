@@ -3,8 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { getAuth, updateProfile } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db } from "../firebase";
-import DashboardLayout from "./DashboardLayout";
+import { db } from "../../firebase";
+import DashboardLayout from "../dashboard/DashboardLayout";
 import { FaPencilAlt, FaUser, FaPhone, FaSave, FaTimes } from "react-icons/fa";
 import "./UserProfile.css";
 

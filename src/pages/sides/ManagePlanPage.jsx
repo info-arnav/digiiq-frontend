@@ -1,6 +1,6 @@
 // ManagePlanPage.js
 import React from "react";
-import DashboardLayout from "./DashboardLayout";
+import DashboardLayout from "../dashboard/DashboardLayout";
 import ManagePlan from "./ManagePlan";
 
 // Simulate fetching user profile (replace with your actual logic)
