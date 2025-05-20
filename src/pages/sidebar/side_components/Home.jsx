@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
-import Features from '../components/Features';
-import News from '../components/News';
-import Footer from '../components/Footer';
+import Navbar from '../../../components/Navbar';
+import Hero from '../../../components/Hero';
+import Features from '../../../components/Features';
+import News from '../../../components/News';
+import Footer from '../../../components/Footer';
 
 export default function Home() {
   const navigate = useNavigate();

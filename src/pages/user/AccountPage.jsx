@@ -1,10 +1,10 @@
 // AccountPage.jsx
 import React, { useState, useEffect } from "react";
-import UserProfile from "./UserProfile";
-import ManagePlan from "./ManagePlan";
+import UserProfile from "../UserProfile";
+import ManagePlan from "../ManagePlan";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 
 const DEFAULT_IMAGE = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 

@@ -1,6 +1,6 @@
 // DashboardLayout.js
 import React, { useState } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "../sidebar/Sidebar";
 import "./DashboardLayout.css";
 
 export default function DashboardLayout({ children }) {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FiFacebook, FiInstagram, FiStar } from 'react-icons/fi';
-import DashboardLayout from './DashboardLayout';
+import DashboardLayout from '../../dashboard/DashboardLayout';
 import './Templates.css';
 
 const Templates = () => {

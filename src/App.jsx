@@ -1,21 +1,21 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+import Home from "./pages/sidebar/side_components/Home";
+import Login from "./pages/user/Login";
+import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ImagePage from "./pages/ImagePage";
-import LipSync from "./pages/LipSync";
-import Videogeneration from "./pages/videogeneration";
-import UserProfile from "./pages/UserProfile";
-import ManagePlan from "./pages/ManagePlan";
-import ManagePlanPage from "./pages/ManagePlanPage";
+import ImagePage from "./pages/sidebar/tools/ImagePage";
+import LipSync from "./pages/sidebar/tools/LipSync";
+import Videogeneration from "./pages/sidebar/tools/videogeneration";
+import UserProfile from "./pages/user/UserProfile";
+import ManagePlan from "./pages/user/ManagePlan";
+import ManagePlanPage from "./pages/user/ManagePlanPage";
 import { UserProvider } from "./contexts/UserContext";
-import Templates from './pages/Templates';
-import BrandKits from './pages/BrandKits';
-import Shared from './pages/Shared';
-import Saved from './pages/Saved';
-import Favourites from './pages/Favorites';
+import Templates from './pages/sidebar/side_components/Templates';
+import BrandKits from './pages/sidebar/side_components/BrandKits';
+import Shared from './pages/sidebar/assests/Shared';
+import Saved from './pages/sidebar/assests/Saved';
+import Favourites from './pages/sidebar/assests/Favorites';
 
 function App() {
   return (
