@@ -1,4 +1,3 @@
-// Hero.jsx
 import React from 'react';
 import './Hero.css';
 
@@ -16,26 +15,22 @@ function Hero({ onGetStarted }) {
   return (
     <section className="hero">
       <div className="hero-content">
-        <h5>Trusted by industry leaders</h5>
-        <h1>The fastest AI Experience ever made</h1>
-        <p>Join thousands of businesses already using our platform</p>
+        <div className="hero-tagline">AI-Powered Creation Suite</div>
+        <h1>The Fastest AI Experience Ever Made</h1>
+        <p>
+          Instantly generate stunning images, create engaging videos, and sync audio to visuals—all powered by cutting-edge AI.
+        </p>
         <button className="get-started" onClick={onGetStarted}>
           Get Started
         </button>
       </div>
-
-      <div className="brands-marquee">
-        <div className="brands-track">
-          {[...brands, ...brands].map((brand, index) => (
-            <div className="brand-logo" key={index}>
-              <img
-                src={brand.logo}
-                alt={brand.name}
-                loading="lazy"
-              />
-            </div>
-          ))}
-        </div>
+      <div className="hero-demo-rectangle"></div>
+      <div className="brands-row">
+        {brands.map((brand, i) => (
+          <div className="brand-logo" key={i}>
+            <img src={brand.logo} alt={brand.name} loading="lazy" />
+          </div>
+        ))}
       </div>
     </section>
   );

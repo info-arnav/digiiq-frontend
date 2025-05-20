@@ -1,162 +1,94 @@
-/* Hero.css */
 .hero {
-    position: relative;
-    padding: 100px 0 150px;
-    text-align: center;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
-    overflow: hidden;
-  }
-  
-  .hero-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    position: relative;
-    z-index: 2;
-  }
-  
-  .hero h5 {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 600;
-  }
-  
-  .hero h1 {
-    font-size: 56px;
-    font-weight: 800;
-    color: #323030;
-    margin: 0 auto 24px;
-    max-width: 800px;
-    line-height: 1.2;
-    background: linear-gradient(90deg, #323030, #3e3f3f);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  
-  .hero p {
-    font-size: 20px;
-    color: #666;
-    max-width: 600px;
-    margin: 0 auto 40px;
-    line-height: 1.6;
-  }
-  
-  .get-started {
-    background: linear-gradient(90deg, #6e8efb, #a777e3);
-    color: white;
-    padding: 16px 32px;
-    border-radius: 50px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 18px;
-    box-shadow: 0 4px 15px rgba(110, 142, 251, 0.4);
-  }
-  
-  .get-started:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(110, 142, 251, 0.6);
-  }
-  
-  /* Brands Marquee */
-  .brands-marquee {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+  background: #fff;
+  padding: 48px 0 32px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 600px;
+  margin: 0 auto 32px;
+  padding: 0 16px;
+}
+
+.hero-tagline {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.hero h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 18px;
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+
+.hero p {
+  color: #444;
+  font-size: 1.12rem;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+.get-started {
+  background: #fff;
+  color: #222;
+  border: 1px solid #ededed;
+  border-radius: 20px;
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 36px;
+}
+
+.get-started:hover {
+  background: #f5f6f7;
+}
+
+.hero-demo-rectangle {
+  width: 400px;
+  height: 220px;
+  background: #111;
+  margin: 0 auto 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .hero-demo-rectangle {
     width: 100%;
-    height: 100px;
-    overflow: hidden;
-    background: rgba(0,0,0,0.03);
-    backdrop-filter: blur(2px);
+    max-width: 320px;
+    height: 120px;
   }
-  
-  .brands-track {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    width: max-content;
-    animation: scroll 40s linear infinite;
-  }
-  
-  .brand-logo {
-    height: 40px;
-    margin: 0 40px;
-    opacity: 0.6;
-    transition: all 0.3s ease;
-    filter: brightness(0) invert(0.2);
-  }
-  
-  .brand-logo:hover {
-    opacity: 0.9;
-    transform: scale(1.1);
-  }
-  
-  .brand-logo img {
-    height: 100%;
-    width: auto;
-    object-fit: contain;
-  }
-  
-  @keyframes scroll {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-  
-  /* Responsive */
-  @media (max-width: 992px) {
-    .hero h1 {
-      font-size: 42px;
-    }
-    
-    .hero p {
-      font-size: 18px;
-    }
-    
-    .brand-logo {
-      height: 35px;
-      margin: 0 30px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .hero {
-      padding: 80px 0 120px;
-    }
-    
-    .hero h1 {
-      font-size: 36px;
-    }
-    
-    .brand-logo {
-      height: 30px;
-      margin: 0 20px;
-    }
-    
-    .brands-marquee {
-      height: 80px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .hero h1 {
-      font-size: 32px;
-    }
-    
-    .brand-logo {
-      height: 25px;
-      margin: 0 15px;
-    }
-    
-    .brands-marquee {
-      height: 60px;
-    }
-  }
+}
+
+.brands-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 36px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.brand-logo img {
+  height: 28px;
+  filter: grayscale(1) brightness(0.25);
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.brand-logo img:hover {
+  opacity: 0.85;
+}
