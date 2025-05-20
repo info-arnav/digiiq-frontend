@@ -1,0 +1,76 @@
+/* UserProfile.css */
+:root {
+    /* Keep your existing variables */
+  }
+  
+  .profile-card {
+    max-width: 800px;
+    margin: 40px auto;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(60,80,180,0.06);
+    background: white;
+    overflow: hidden;
+  }
+  
+  .profile-header {
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    text-align: center;
+  }
+  
+  .avatar-wrapper {
+    margin: 0 auto 1rem;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .profile-details {
+    padding: 2rem;
+  }
+  
+  .detail-item {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Keep other styles but remove conflicting layout styles */
+  .profile-container, .profile-card {
+    width: auto;
+    height: auto;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .profile-card {
+      margin: 20px;
+      border-radius: 12px;
+    }
+    
+    .profile-details {
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .profile-header {
+      padding: 1.5rem 0.5rem;
+    }
+    
+    .profile-details {
+      padding: 1rem;
+    }
+    
+    .detail-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .detail-icon {
+      margin-bottom: 0.5rem;
+    }
+  }
+  

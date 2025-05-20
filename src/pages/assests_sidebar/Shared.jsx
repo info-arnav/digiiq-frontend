@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DashboardLayout from "./DashboardLayout";
+import DashboardLayout from "../dashboard/DashboardLayout";
 import { 
   FiFile, 
   FiImage, 

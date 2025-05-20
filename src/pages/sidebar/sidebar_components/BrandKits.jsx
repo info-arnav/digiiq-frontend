@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from './DashboardLayout'; // Adjust path
+import DashboardLayout from '../../dashboard/DashboardLayout'; // Adjust path
 import './BrandKits.css';
 import CreateBrandKitModal from './CreateBrandKitModal';
 
