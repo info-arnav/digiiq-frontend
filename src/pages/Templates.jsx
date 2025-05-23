@@ -1,10 +1,11 @@
+// Templates.jsx
 import React, { useState } from 'react';
 import { FiFacebook, FiInstagram, FiStar } from 'react-icons/fi';
 import DashboardLayout from './DashboardLayout';
-import Navbar from './Navbar1';
+import Navbar from './Navbar1';    // your existing Navbar component
 import './Templates.css';
 
-const Templates = () => {
+export default function Templates() {
   const [activeCategory, setActiveCategory] = useState('all');
   const categories = ['all', 'facebook', 'instagram'];
 
@@ -19,49 +20,47 @@ const Templates = () => {
   );
 
   return (
-    <div>
+    <DashboardLayout>
+      {/* Navbar sits inside main-content, to the right of the sidebar */}
       <Navbar />
-      <DashboardLayout>
-        <div className="templates-container">
-          <div className="templates-header">
-            <h1>
-              <FiStar size={24} className="header-icon" />
-              Templates
-            </h1>
-            <div className="social-icons">
-              <a href="https://facebook.com" target="_blank" rel="noreferrer">
-                <FiFacebook size={20} />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer">
-                <FiInstagram size={20} />
-              </a>
-            </div>
-          </div>
 
-          <div className="templates-toggle-buttons">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                className={`view-option ${activeCategory === cat ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
-              </button>
-            ))}
-          </div>
-
-          <div className="template-content">
-            <h2>
-              {activeCategory === 'all'
-                ? 'All Templates'
-                : `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} Templates`}
-            </h2>
-            {renderTemplates()}
+      <div className="templates-container">
+        <div className="templates-header">
+          <h1>
+            <FiStar size={24} className="header-icon" />
+            Templates
+          </h1>
+          <div className="social-icons">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer">
+              <FiFacebook size={20} />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer">
+              <FiInstagram size={20} />
+            </a>
           </div>
         </div>
-      </DashboardLayout>
-    </div>
-  );
-};
 
-export default Templates;
+        <div className="templates-toggle-buttons">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              className={`view-option ${activeCategory === cat ? 'active' : ''}`}
+              onClick={() => setActiveCategory(cat)}
+            >
+              {cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        <div className="template-content">
+          <h2>
+            {activeCategory === 'all'
+              ? 'All Templates'
+              : `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} Templates`}
+          </h2>
+          {renderTemplates()}
+        </div>
+      </div>
+    </DashboardLayout>
+  );
+}

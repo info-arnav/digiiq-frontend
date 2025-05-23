@@ -63,13 +63,31 @@
   border-color: #007bff;
 }
 
-/* Template Grid */
+/* Template Section - Horizontal Scroll */
 .template-section.active {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  display: flex;
+  flex-direction: row;
   gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
 }
 
+.template-section.active::-webkit-scrollbar {
+  height: 8px;
+}
+
+.template-section.active::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.template-section.active::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+/* Template Cards */
 .template-card {
   background: white;
   border-radius: 10px;
@@ -79,6 +97,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 200px;
+  min-width: 200px;
   height: 180px;
   text-align: center;
   font-size: 14px;
@@ -102,10 +122,6 @@
 
 /* Responsive */
 @media (max-width: 600px) {
-  .template-section.active {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  }
-
   .templates-toggle-buttons .view-option {
     font-size: 14px;
     padding: 8px 16px;
@@ -113,5 +129,7 @@
 
   .template-card {
     height: 140px;
+    width: 160px;
+    min-width: 160px;
   }
 }

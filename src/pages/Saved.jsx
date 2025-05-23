@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DashboardLayout from "./DashboardLayout";
+import Navbar from "./Navbar1"; // Add Navbar like in Template.jsx
 import {
   FiImage,
   FiFilm,
@@ -42,7 +43,10 @@ const Saved = () => {
               <span>Modified: {item.modified}</span>
             </p>
           </div>
-          <button className="file-actions" onClick={() => console.log(`Actions for ${item.name}`)}>
+          <button
+            className="file-actions"
+            onClick={() => console.log(`Actions for ${item.name}`)}
+          >
             <FiMoreVertical size={18} />
           </button>
         </div>
@@ -52,6 +56,10 @@ const Saved = () => {
 
   return (
     <DashboardLayout>
+      {/* Navbar after Sidebar */}
+      <Navbar />
+
+      {/* Main Content */}
       <div className="saved-container">
         <div className="shared-header">
           <h1>
@@ -83,13 +91,13 @@ const Saved = () => {
         <div className="shared-content">
           <div className="files-section">
             <div className="section-header">
-              <h2>{
-                activeCategory === "images"
+              <h2>
+                {activeCategory === "images"
                   ? "Saved Images"
                   : activeCategory === "videos"
                   ? "Saved Videos"
-                  : "Saved Lip Sync Videos"
-              }</h2>
+                  : "Saved Lip Sync Videos"}
+              </h2>
             </div>
             {renderItems(savedItems[activeCategory])}
           </div>

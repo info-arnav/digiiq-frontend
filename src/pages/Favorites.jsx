@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DashboardLayout from "./DashboardLayout";
+import Navbar from "./Navbar1"; // Import Navbar
 import {
   FiImage,
   FiFilm,
@@ -56,49 +57,52 @@ const Favorites = () => {
   );
 
   return (
-    <DashboardLayout>
-      <div className="favorites-container">
-        <div className="favorites-header">
-          <h1>
-            <FiHeart size={24} className="header-icon" fill="#ff4081" />
-            Favorites
-          </h1>
-          <div className="category-tabs">
-            <button
-              className={`tab-btn ${activeCategory === "images" ? "active" : ""}`}
-              onClick={() => setActiveCategory("images")}
-            >
-              Images
-            </button>
-            <button
-              className={`tab-btn ${activeCategory === "videos" ? "active" : ""}`}
-              onClick={() => setActiveCategory("videos")}
-            >
-              Videos
-            </button>
-            <button
-              className={`tab-btn ${activeCategory === "lipSync" ? "active" : ""}`}
-              onClick={() => setActiveCategory("lipSync")}
-            >
-              Lip Sync Videos
-            </button>
+    <>
+      <Navbar /> {/* Add Navbar here */}
+      <DashboardLayout>
+        <div className="favorites-container">
+          <div className="favorites-header">
+            <h1>
+              <FiHeart size={24} className="header-icon" fill="#ff4081" />
+              Favorites
+            </h1>
+            <div className="category-tabs">
+              <button
+                className={`tab-btn ${activeCategory === "images" ? "active" : ""}`}
+                onClick={() => setActiveCategory("images")}
+              >
+                Images
+              </button>
+              <button
+                className={`tab-btn ${activeCategory === "videos" ? "active" : ""}`}
+                onClick={() => setActiveCategory("videos")}
+              >
+                Videos
+              </button>
+              <button
+                className={`tab-btn ${activeCategory === "lipSync" ? "active" : ""}`}
+                onClick={() => setActiveCategory("lipSync")}
+              >
+                Lip Sync Videos
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div className="favorites-content">
-          <div className="section-header">
-            <h2>
-              {activeCategory === "images"
-                ? "Favorite Images"
-                : activeCategory === "videos"
-                ? "Favorite Videos"
-                : "Favorite Lip Sync Videos"}
-            </h2>
+          <div className="favorites-content">
+            <div className="section-header">
+              <h2>
+                {activeCategory === "images"
+                  ? "Favorite Images"
+                  : activeCategory === "videos"
+                  ? "Favorite Videos"
+                  : "Favorite Lip Sync Videos"}
+              </h2>
+            </div>
+            {renderItems(favoriteItems[activeCategory])}
           </div>
-          {renderItems(favoriteItems[activeCategory])}
         </div>
-      </div>
-    </DashboardLayout>
+      </DashboardLayout>
+    </>
   );
 };
 

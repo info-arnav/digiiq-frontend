@@ -14,12 +14,16 @@ export default function DashboardLayout({ children }) {
         onClick={() => setSidebarOpen(true)}
         aria-label="Open sidebar"
       >
-        <span className="hamburger"></span>
-        <span className="hamburger"></span>
-        <span className="hamburger"></span>
+        <span className="hamburger" />
+        <span className="hamburger" />
+        <span className="hamburger" />
       </button>
+
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <main className="main-content">{children}</main>
+
+      <main className="main-content">
+        {children}
+      </main>
     </div>
   );
 }

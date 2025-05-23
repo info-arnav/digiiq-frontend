@@ -93,4 +93,35 @@
     background: #ececec;
     border-radius: 4px;
   }
-  
+  /* DashboardLayout.css */
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;           /* full viewport height */
+  overflow: hidden;
+}
+
+.sidebar-toggle {
+  display: none;           /* shown only on mobile via your existing media queries */
+}
+
+.sidebar {
+  width: 260px;            /* or your preferred width */
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.main-content {
+  flex: 1;                 /* take remaining horizontal space */
+  display: flex;
+  flex-direction: column;  /* so Navbar + page stack vertically */
+  overflow-y: auto;
+}
